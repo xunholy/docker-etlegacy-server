@@ -1,1 +1,1 @@
-# docker-etlegacy-server
+# ETLegacy Server Docker Image
