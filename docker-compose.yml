@@ -1,0 +1,9 @@
+version: '3'
+services:
+  etlegacy:
+    image: xunholy/enemy-territory:latest
+    ports:
+      - "27960:27960/udp"
+    volumes:
+      - ./config/server.cfg:/etlegacy/legacy/server.cfg
+    restart: unless-stopped
