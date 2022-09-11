@@ -2,13 +2,21 @@ name: docker
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - '.github/workflows/docker.yml'
-      - 'config/**'
-      - 'Dockerfile'
+  pull_request:
     branches:
       - main
+    paths:
+      - '.github/workflows/docker.yaml'
+      - 'config/**'
+      - 'Dockerfile'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/docker.yaml'
+      - 'config/**'
+      - 'Dockerfile'
+
 
 jobs:
   build:
