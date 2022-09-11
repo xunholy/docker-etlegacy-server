@@ -9,7 +9,7 @@ RUN apt-get update && \
         vim
 
 # Use the latest RPi armv7 compatible binaries; Check download page for latest revision.
-RUN wget -O binaries https://www.etlegacy.com/download/file/407 --no-check-certificate && \
+RUN wget -O binaries https://www.etlegacy.com/download/file/418 --no-check-certificate && \
     tar -xvf binaries && \
     mv etlegacy-v2.80.2-arm/* .
 
