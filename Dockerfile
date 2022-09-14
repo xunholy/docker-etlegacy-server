@@ -1,4 +1,4 @@
-FROM balenalib/raspberry-pi-debian:latest
+FROM ubuntu:latest
 
 WORKDIR /etlegacy
 
