@@ -1,4 +1,4 @@
-FROM arm32v7/ubuntu:latest
+FROM balenalib/raspberry-pi-debian:latest
 
 WORKDIR /etlegacy
 
