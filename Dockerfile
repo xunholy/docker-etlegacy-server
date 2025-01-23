@@ -1,17 +1,17 @@
-FROM balenalib/raspberry-pi-debian:latest
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND noninteractive
 
 WORKDIR /etlegacy
 
 RUN apt-get update && \
     apt-get install -y \
-        wget \
-        unzip \
-        vim
+    wget \
+    unzip \
+    vim
 
-# Use the latest RPi armv7 compatible binaries; Check download page for latest revision.
-RUN wget -O binaries https://www.etlegacy.com/download/file/418 --no-check-certificate && \
-    tar -xvf binaries && \
-    mv etlegacy-v2.80.2-arm/* .
+RUN wget -O binaries.gz https://www.etlegacy.com/download/file/700 --no-check-certificate && \
+    gunzip binaries.gz && tar -xvf binaries && mv etlegacy-v2.83.2-x86_64/* .
 
 RUN TMP_DIR=$(mktemp -d -t et260b-install-XXXX) && \
     cd $TMP_DIR && \
