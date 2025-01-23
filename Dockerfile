@@ -1,4 +1,4 @@
-FROM balenalib/raspberry-pi-debian:latest
+FROM ubuntu:latest
 
 WORKDIR /etlegacy
 
@@ -6,7 +6,8 @@ RUN apt-get update && \
     apt-get install -y \
         wget \
         unzip \
-        vim
+        vim \
+        libc6:armhf libstdc++6:armhf
 
 # Use the latest RPi armv7 compatible binaries; Check download page for latest revision.
 RUN wget -O binaries https://www.etlegacy.com/download/file/418 --no-check-certificate && \
