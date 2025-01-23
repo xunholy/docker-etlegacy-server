@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Renovate"
+
+on:
+  merge_group:
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: "Dry Run"
+        default: false
+        type: choice
+        options:
+          - extract
+          - lookup
+          - full
+        required: false
+      logLevel:
+        description: "Log Level"
+        default: "info"
+        type: choice
+        options:
+          - debug
+          - info
+          - warn
+          - error
+          - fatal
+        required: false
+      version:
+        description: Renovate version
+        default: latest
+        required: false
+  schedule:
+    - cron: "0 * * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/schedule-renovate.yml
+      - .github/renovate.json5
+      - .github/renovate/**.json5
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  LOG_LEVEL: "${{ inputs.logLevel || 'debug' }}"
+  RENOVATE_DRY_RUN: "${{ inputs.dryRun == true }}"
+  RENOVATE_PLATFORM: github
+  RENOVATE_PLATFORM_COMMIT: true
+  RENOVATE_AUTODISCOVER: true
+  RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
+  WORKFLOW_RENOVATE_VERSION: "${{ inputs.version || 'latest' }}"
+  RENOVATE_USERNAME: "${{ secrets.BOT_USERNAME }}[bot]"
+  RENOVATE_GIT_AUTHOR: "${{ secrets.BOT_USERNAME }} <${{ secrets.BOT_USER_ID }}+${{ secrets.BOT_USERNAME }}[bot]@users.noreply.github.com>"
+
+jobs:
+  renovate:
+    name: Renovate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Validate Renovate Configuration
+        uses: suzuki-shunsuke/github-action-renovate-config-validator@c22827f47f4f4a5364bdba19e1fe36907ef1318e # v1.1.1
+
+      - name: Generate Token
+        uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Renovate
+        uses: renovatebot/github-action@3f10d7a25cf0aa7b37519aa771ed9143fcbb5da5 # v41.0.10
+        with:
+          configurationFile: .github/renovate.json5
+          token: "x-access-token:${{ steps.app-token.outputs.token }}"
+          renovate-version: "${{ env.WORKFLOW_RENOVATE_VERSION }}"
