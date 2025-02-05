@@ -5,7 +5,7 @@ WORKDIR /etlegacy
 
 # Install necessary tools
 RUN apt-get update && \
-    apt-get install -y wget unzip tar && \
+    apt-get install -y wget unzip tar rsync && \
     rm -rf /var/lib/apt/lists/*w
 
 # Create user (must match Kubernetes securityContext)
