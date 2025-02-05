@@ -1,13 +1,15 @@
 # 🚀 Stage 1: Build and extract files
-FROM alpine:latest AS builder
+FROM debian:bookworm AS builder
 
 WORKDIR /etlegacy
 
 # Install necessary tools
-RUN apk add --no-cache wget unzip tar shadow
+RUN apt-get update && \
+    apt-get install -y wget unzip tar && \
+    rm -rf /var/lib/apt/lists/*w
 
 # Create user (must match Kubernetes securityContext)
-RUN addgroup -g 1000 etlegacy && adduser -D -u 1000 -G etlegacy etlegacy
+RUN groupadd -g 1000 etlegacy && useradd -m -u 1000 -g etlegacy etlegacy
 
 # Download and extract etlegacy binaries
 RUN wget -O binaries.gz https://www.etlegacy.com/download/file/700 --no-check-certificate && \
@@ -20,10 +22,10 @@ RUN wget -O et260b.zip https://cdn.splashdamage.com/downloads/games/wet/et260b.x
     unzip et260b.zip && \
     ./et260b.x86_keygen_V03.run --noexec --target extracted && \
     mv extracted/**/*pak* /etlegacy/etmain/ && \
-    chown -R 1000:1000 /etlegacy/etmain
+    chown -R 1000:1000 /etlegacy/etmai
 
 # 🚀 Stage 2: Copy only necessary files to a minimal final image
-FROM gcr.io/distroless/base-nonroot AS final
+FROM gcr.io/distroless/base-debian12 AS final
 
 WORKDIR /etlegacy
 
