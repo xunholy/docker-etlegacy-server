@@ -31,8 +31,8 @@ WORKDIR /etlegacy
 
 # Copy necessary files from the builder stage
 COPY --from=builder --chown=1000:1000 /etlegacy /etlegacy
-COPY ./config/server.cfg ./legacy/server.cfg
-COPY ./config/start.sh ./start.sh
+COPY --chown=1000:1000 ./config/server.cfg /etlegacy/legacy/server.cfg
+COPY --chown=1000:1000 ./config/start.sh /etlegacy/start.sh
 
 # Use non-root user (must match match Kubernetes securityContext)
 USER 1000:1000
