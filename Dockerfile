@@ -2,17 +2,18 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Create the non-root user that matches Kubernetes securityContext
-RUN groupadd -g 1000 etlegacy && \
-    useradd -m -u 1000 -g etlegacy etlegacy
-
 WORKDIR /etlegacy
 
 RUN apt-get update && \
     apt-get install -y \
     wget \
     unzip \
-    vim
+    vim \
+    shadow
+
+# Create the non-root user that matches Kubernetes securityContext
+RUN groupadd -g 1000 etlegacy && \
+    useradd -m -u 1000 -g etlegacy etlegacy
 
 # Download and extract files as root, then fix ownership
 RUN wget -O binaries.gz https://www.etlegacy.com/download/file/700 --no-check-certificate && \
