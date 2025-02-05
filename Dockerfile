@@ -1,21 +1,21 @@
-FROM ubuntu:24.04
+FROM alpine:latest
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
-WORKDIR /etlegacy
-
-RUN apt-get update && \
-    apt-get install -y \
+# Install required packages (Alpine uses `apk` instead of `apt`)
+RUN apk add --no-cache \
     wget \
     unzip \
     vim \
-    shadow
+    shadow  # `shadow` provides user management tools like `useradd`
 
-# Create the non-root user that matches Kubernetes securityContext
-RUN groupadd -g 1000 etlegacy && \
-    useradd -m -u 1000 -g etlegacy etlegacy
+# Create the non-root user and group
+RUN addgroup -g 1000 etlegacy && \
+    adduser -D -u 1000 -G etlegacy etlegacy
 
-# Download and extract files as root, then fix ownership
+WORKDIR /etlegacy
+
+# Download and extract files
 RUN wget -O binaries.gz https://www.etlegacy.com/download/file/700 --no-check-certificate && \
     gunzip binaries.gz && tar -xvf binaries && mv etlegacy-v2.83.2-x86_64/* . && \
     chown -R 1000:1000 /etlegacy
@@ -28,14 +28,13 @@ RUN TMP_DIR=$(mktemp -d -t et260b-install-XXXX) && \
     mv $TMP_DIR/extracted/**/*pak* /etlegacy/etmain/ && \
     chown -R 1000:1000 /etlegacy/etmain
 
-# Copy files with correct ownership
+# Copy config files with correct ownership
 COPY --chown=1000:1000 ./config/server.cfg /etlegacy/legacy/server.cfg
 COPY --chown=1000:1000 ./config/start.sh /etlegacy/start.sh
 
-# Ensure scripts are executable
 RUN chmod +x /etlegacy/start.sh
 
-# Switch to the non-root user
+# Run as non-root user
 USER 1000:1000
 
 EXPOSE 27960/udp
