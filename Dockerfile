@@ -22,7 +22,7 @@ RUN wget -O et260b.zip https://cdn.splashdamage.com/downloads/games/wet/et260b.x
     unzip et260b.zip && \
     ./et260b.x86_keygen_V03.run --noexec --target extracted && \
     mv extracted/**/*pak* /etlegacy/etmain/ && \
-    chown -R 1000:1000 /etlegacy/etmai
+    chown -R 1000:1000 /etlegacy/etmain
 
 # 🚀 Stage 2: Copy only necessary files to a minimal final image
 FROM gcr.io/distroless/base-debian12 AS final
@@ -31,10 +31,8 @@ WORKDIR /etlegacy
 
 # Copy necessary files from the builder stage
 COPY --from=builder --chown=1000:1000 /etlegacy /etlegacy
-COPY --from=builder /etlegacy/start.sh /etlegacy/start.sh
-
-# Ensure the script is executable
-RUN chmod +x /etlegacy/start.sh
+COPY ./config/server.cfg ./legacy/server.cfg
+COPY ./config/start.sh ./start.sh
 
 # Use non-root user (must match match Kubernetes securityContext)
 USER 1000:1000
@@ -42,3 +40,8 @@ USER 1000:1000
 EXPOSE 27960/udp
 
 ENTRYPOINT [ "/etlegacy/start.sh" ]
+
+
+COPY ./config/server.cfg /etlegacy/legacy/server.cfg
+
+COPY ./config/start.sh /etlegacy/start.sh
