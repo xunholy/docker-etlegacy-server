@@ -40,8 +40,3 @@ USER 1000:1000
 EXPOSE 27960/udp
 
 ENTRYPOINT [ "/etlegacy/start.sh" ]
-
-
-COPY ./config/server.cfg /etlegacy/legacy/server.cfg
-
-COPY ./config/start.sh /etlegacy/start.sh

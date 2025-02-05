@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Please note that ET: Legacy is not compatible with PunkBuster enabled servers. ET: Legacy clients also cannot connect to servers running the ETPro mod.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
