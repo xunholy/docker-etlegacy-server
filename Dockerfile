@@ -1,5 +1,5 @@
 # 🚀 Stage 1: Build and extract files
-FROM debian:bookworm AS builder
+FROM debian:trixie AS builder
 
 WORKDIR /etlegacy
 
@@ -25,7 +25,7 @@ RUN wget -O et260b.zip https://cdn.splashdamage.com/downloads/games/wet/et260b.x
     chown -R 1000:1000 /etlegacy/etmain
 
 # 🚀 Stage 2: Copy only necessary files to a minimal final image
-FROM debian:bookworm AS final
+FROM debian:trixie AS final
 
 WORKDIR /etlegacy
 
