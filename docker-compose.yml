@@ -1,7 +1,7 @@
-version: '3'
 services:
   etlegacy:
-    image: moby-dangling@sha256:065bb772a37e0a345aafb0b30fe902e901c61006ef5f81c9eca3bbe2a57fd9a4
+    build: .
+    image: ghcr.io/xunholy/enemy-territory:latest
     ports:
       - "27960:27960/udp"
     volumes:
