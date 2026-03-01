@@ -48,7 +48,6 @@ RUN apt-get update && \
 WORKDIR /etlegacy
 
 COPY --from=builder --chown=1000:1000 /etlegacy /etlegacy
-COPY --chown=1000:1000 ./config/server.cfg /etlegacy/legacy/server.cfg
 COPY --chown=1000:1000 ./config/server.cfg.template /etlegacy/legacy/server.cfg.template
 COPY --chown=1000:1000 ./config/start.sh /etlegacy/start.sh
 
