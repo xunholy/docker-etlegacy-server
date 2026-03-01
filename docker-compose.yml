@@ -6,4 +6,10 @@ services:
       - "27960:27960/udp"
     volumes:
       - ./config/server.cfg:/etlegacy/legacy/server.cfg
+      - etlegacy-logs:/etlegacy/legacy/log
+      - etlegacy-etmain:/etlegacy/etmain
     restart: unless-stopped
+
+volumes:
+  etlegacy-logs:
+  etlegacy-etmain:
