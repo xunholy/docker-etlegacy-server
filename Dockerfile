@@ -9,14 +9,23 @@ RUN apt-get update && \
 
 RUN groupadd -g 1000 etlegacy && useradd -m -u 1000 -g etlegacy etlegacy
 
-# Download and extract etlegacy binaries
-RUN wget -O binaries.gz https://www.etlegacy.com/download/file/700 && \
+# Download and extract etlegacy binaries (architecture-aware)
+# TODO: Update checksum when upgrading ETL version
+ARG TARGETPLATFORM
+RUN case "${TARGETPLATFORM}" in \
+      "linux/amd64") ETL_URL="https://www.etlegacy.com/download/file/700" ; ETL_ARCH="x86_64" ;; \
+      "linux/arm64") ETL_URL="https://www.etlegacy.com/download/file/710" ; ETL_ARCH="aarch64" ;; \
+      *) echo "Unsupported platform: ${TARGETPLATFORM}" && exit 1 ;; \
+    esac && \
+    wget -O binaries.gz "${ETL_URL}" && \
     gunzip binaries.gz && tar -xvf binaries && \
-    mv etlegacy-v2.83.2-x86_64/* . && \
+    mv etlegacy-v2.83.2-${ETL_ARCH}/* . && \
     chown -R 1000:1000 /etlegacy
 
 # Download and extract ET 2.60b files
+# Checksum for official Splash Damage ET 2.60b installer
 RUN wget -O et260b.zip https://cdn.splashdamage.com/downloads/games/wet/et260b.x86_full.zip && \
+    echo "2a8fef8e8558efffcad658bb9a8b12df8740418b3514142350eba3b7641eb3e0  et260b.zip" | sha256sum -c - && \
     unzip et260b.zip && \
     ./et260b.x86_keygen_V03.run --noexec --target extracted && \
     mv extracted/**/*pak* /etlegacy/etmain/ && \
