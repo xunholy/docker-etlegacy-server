@@ -35,4 +35,7 @@ USER 1000:1000
 
 EXPOSE 27960/udp
 
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD test -d /proc/1/fd || exit 1
+
 ENTRYPOINT ["/etlegacy/start.sh"]
