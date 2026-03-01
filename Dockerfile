@@ -51,6 +51,8 @@ COPY --from=builder --chown=1000:1000 /etlegacy /etlegacy
 COPY --chown=1000:1000 ./config/server.cfg.template /etlegacy/legacy/server.cfg.template
 COPY --chown=1000:1000 ./config/start.sh /etlegacy/start.sh
 
+ENV HOME=/etlegacy
+
 USER 1000:1000
 
 EXPOSE 27960/udp
@@ -59,4 +61,4 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
   CMD test -d /proc/1/fd || exit 1
 
 ENTRYPOINT ["/etlegacy/start.sh"]
-CMD ["+set", "fs_game", "legacy", "+exec", "server.cfg"]
+CMD ["+set", "fs_game", "legacy", "+set", "fs_homepath", "/etlegacy", "+exec", "server.cfg"]

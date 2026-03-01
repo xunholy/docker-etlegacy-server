@@ -9,10 +9,10 @@
 
 // SERVER IDENTITY (configurable via environment variables)
 
-set sv_hostname "${SERVER_NAME:-ETLegacy Server}"
-set rconPassword "${RCON_PASSWORD:-}"
-set g_password "${SERVER_PASSWORD:-}"
-set sv_maxclients "${MAX_CLIENTS:-20}"
+set sv_hostname "$SERVER_NAME"
+set rconPassword "$RCON_PASSWORD"
+set g_password "$SERVER_PASSWORD"
+set sv_maxclients "$MAX_CLIENTS"
 
 // LOGGING & PROTECTION
 
