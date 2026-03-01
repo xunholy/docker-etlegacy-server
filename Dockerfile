@@ -31,10 +31,15 @@ RUN rm -f /etlegacy/etl.x86_64 /etlegacy/etl_bot.x86_64.sh \
 # Stage 2: Copy only necessary files to a minimal final image
 FROM debian:bookworm
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gettext-base && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /etlegacy
 
 COPY --from=builder --chown=1000:1000 /etlegacy /etlegacy
 COPY --chown=1000:1000 ./config/server.cfg /etlegacy/legacy/server.cfg
+COPY --chown=1000:1000 ./config/server.cfg.template /etlegacy/legacy/server.cfg.template
 COPY --chown=1000:1000 ./config/start.sh /etlegacy/start.sh
 
 USER 1000:1000

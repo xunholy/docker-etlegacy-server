@@ -6,10 +6,9 @@ services:
       - "27960:27960/udp"
     volumes:
       - ./config/server.cfg:/etlegacy/legacy/server.cfg
-      - etlegacy-logs:/etlegacy/legacy/log
-      - etlegacy-etmain:/etlegacy/etmain
+    # environment:
+    #   - SERVER_NAME=My ETLegacy Server
+    #   - RCON_PASSWORD=changeme
+    #   - SERVER_PASSWORD=
+    #   - MAX_CLIENTS=20
     restart: unless-stopped
-
-volumes:
-  etlegacy-logs:
-  etlegacy-etmain:

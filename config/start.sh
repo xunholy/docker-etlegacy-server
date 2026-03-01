@@ -7,4 +7,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 FS_HOMEPATH="${FS_HOMEPATH:-${DIR}}"
 mkdir -p "${FS_HOMEPATH}/legacy/log"
 
+# Apply environment variable substitution to config template if it exists
+if [ -f "${DIR}/legacy/server.cfg.template" ]; then
+    envsubst < "${DIR}/legacy/server.cfg.template" > "${DIR}/legacy/server.cfg"
+fi
+
 exec "${DIR}/etlded.x86_64" "$@"
