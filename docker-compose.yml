@@ -7,3 +7,12 @@ services:
     volumes:
       - ./config/server.cfg:/etlegacy/legacy/server.cfg
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '2.0'
+        reservations:
+          memory: 256M
