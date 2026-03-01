@@ -28,7 +28,7 @@ FROM debian:bookworm
 WORKDIR /etlegacy
 
 COPY --from=builder --chown=1000:1000 /etlegacy /etlegacy
-COPY --chown=1000:1000 ./config/server.cfg /etlegacy/legacy/server.cfg
+COPY --chown=1000:1000 ./config/server.cfg /etlegacy/legacy/default_server.cfg
 COPY --chown=1000:1000 ./config/start.sh /etlegacy/start.sh
 
 USER 1000:1000
