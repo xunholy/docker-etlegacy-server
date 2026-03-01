@@ -7,6 +7,12 @@
 // Lua server administration suite provided by WolfAdmin
 // see https://dev.timosmit.com/wolfadmin/
 
+// SERVER IDENTITY (configurable via environment variables)
+
+set sv_hostname "$SERVER_NAME"
+set rconPassword "$RCON_PASSWORD"
+set g_password "$SERVER_PASSWORD"
+set sv_maxclients "$MAX_CLIENTS"
 
 // LOGGING & PROTECTION
 

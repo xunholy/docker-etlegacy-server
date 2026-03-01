@@ -5,5 +5,24 @@ services:
     ports:
       - "27960:27960/udp"
     volumes:
-      - ./config/server.cfg:/etlegacy/legacy/server.cfg
+      - etlegacy-logs:/etlegacy/legacy/log
+      - etlegacy-etmain:/etlegacy/etmain
+    # environment:
+    #   - SERVER_NAME=My ETLegacy Server
+    #   - RCON_PASSWORD=changeme
+    #   - SERVER_PASSWORD=
+    #   - MAX_CLIENTS=20
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '2.0'
+        reservations:
+          memory: 256M
+
+volumes:
+  etlegacy-logs:
+  etlegacy-etmain:

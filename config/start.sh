@@ -7,4 +7,22 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 FS_HOMEPATH="${FS_HOMEPATH:-${DIR}}"
 mkdir -p "${FS_HOMEPATH}/legacy/log"
 
-exec "${DIR}/etlded.x86_64" "$@"
+# Set defaults for config template environment variables
+export SERVER_NAME="${SERVER_NAME:-ETLegacy Server}"
+export RCON_PASSWORD="${RCON_PASSWORD:-}"
+export SERVER_PASSWORD="${SERVER_PASSWORD:-}"
+export MAX_CLIENTS="${MAX_CLIENTS:-20}"
+
+# Apply environment variable substitution to config template if it exists
+if [ -f "${DIR}/legacy/server.cfg.template" ]; then
+    envsubst < "${DIR}/legacy/server.cfg.template" > "${DIR}/legacy/server.cfg"
+fi
+
+# Find the etlded binary for the current architecture
+ETLDED=$(find "${DIR}" -maxdepth 1 -name 'etlded.*' -type f | head -1)
+if [ -z "${ETLDED}" ]; then
+    echo "ERROR: etlded binary not found in ${DIR}" >&2
+    exit 1
+fi
+
+exec "${ETLDED}" "$@"
