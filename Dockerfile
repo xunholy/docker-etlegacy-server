@@ -22,6 +22,12 @@ RUN wget -O et260b.zip https://cdn.splashdamage.com/downloads/games/wet/et260b.x
     mv extracted/**/*pak* /etlegacy/etmain/ && \
     chown -R 1000:1000 /etlegacy/etmain
 
+# Remove client binaries, build artifacts, and unnecessary files
+RUN rm -f /etlegacy/etl.x86_64 /etlegacy/etl_bot.x86_64.sh \
+    /etlegacy/*.so /etlegacy/binaries /etlegacy/et260b* \
+    /etlegacy/COPYING /etlegacy/INSTALL \
+    && rm -rf /etlegacy/extracted /etlegacy/etlegacy-v2.83.2-x86_64
+
 # Stage 2: Copy only necessary files to a minimal final image
 FROM debian:bookworm
 
