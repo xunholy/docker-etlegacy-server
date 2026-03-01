@@ -10,13 +10,17 @@ RUN apt-get update && \
 RUN groupadd -g 1000 etlegacy && useradd -m -u 1000 -g etlegacy etlegacy
 
 # Download and extract etlegacy binaries
+# TODO: Update checksum when upgrading ETL version
 RUN wget -O binaries.gz https://www.etlegacy.com/download/file/700 && \
+    echo "d97b2a4be89b59924044d43e9391686b1b18919e32f97248d1b412235530ee67  binaries.gz" | sha256sum -c - && \
     gunzip binaries.gz && tar -xvf binaries && \
     mv etlegacy-v2.83.2-x86_64/* . && \
     chown -R 1000:1000 /etlegacy
 
 # Download and extract ET 2.60b files
+# Checksum for official Splash Damage ET 2.60b installer
 RUN wget -O et260b.zip https://cdn.splashdamage.com/downloads/games/wet/et260b.x86_full.zip && \
+    echo "2a8fef8e8558efffcad658bb9a8b12df8740418b3514142350eba3b7641eb3e0  et260b.zip" | sha256sum -c - && \
     unzip et260b.zip && \
     ./et260b.x86_keygen_V03.run --noexec --target extracted && \
     mv extracted/**/*pak* /etlegacy/etmain/ && \
