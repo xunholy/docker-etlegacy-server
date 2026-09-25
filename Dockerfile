@@ -1,5 +1,5 @@
 # Stage 1: Build and extract files
-FROM debian:bookworm AS builder
+FROM debian:bookworm-20260316 AS builder
 
 ARG ETL_FILE_ID=700
 ARG ETL_VERSION=v2.83.2
